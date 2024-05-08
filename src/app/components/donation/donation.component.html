@@ -1,0 +1,47 @@
+<div>
+    <a href="/#/login" class="btn btn-success m-2 float-right">Login</a>
+</div>
+<div class="container mt-4">
+    <h2 class="text-center">List of Causes, Click one to donate !</h2>
+    <div>
+        <ul class="list-group text-center">
+            <li *ngFor="let cause of causes" class="list-group-item">
+                <button class="btn btn-primary" (click)="openModal(cause)">{{
+                    cause.name }}</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="selectedCause?.name" class="modal" [class]="selectedCause?.name ? 'd-block':'d-none'">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ selectedCause.name }}</h5>
+                    <button type="button" class="close" (click)="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form (ngSubmit)="donate()">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" [(ngModel)]="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input type="number" class="form-control" id="amount" [(ngModel)]="amount" name="amount"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Donate</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

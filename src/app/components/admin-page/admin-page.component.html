@@ -1,0 +1,75 @@
+<div class="container">
+    <div *ngIf="causeDonations.length > 0">
+        <div class="mt-4">
+            <h2>Causes and Donations</h2>
+            <button id="addCauseBtn" class="btn btn-warning float-right m-2" data-toggle="modal"
+                data-target="#addCauseModal">Add Cause</button>
+        </div>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Cause ID</th>
+                    <th scope="col">Cause Name</th>
+                    <th scope="col">Total Donations</th>
+                    <th scope="col">Donors</th>
+                    <th>Api Key</th>
+                    <th>Disable Cause</th> <!-- New column header -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cause of causeDonations">
+                    <td>{{ cause.cause_id }}</td>
+                    <td>{{ cause.name }}</td>
+                    <td>{{ getTotalDonationAmount(cause) | currency }}</td>
+                    <td>
+                        <ul>
+                            <li *ngFor="let donation of cause.donations">
+                                {{ donation.name }} - {{ donation.amount | currency }}
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        {{ cause.apiKey }}
+                        <button class="btn btn-primary btn-sm" (click)="copyToClipboard(cause.apiKey)">Copy</button>
+                    </td>
+                    <td> <!-- New column for disable button -->
+                        <button *ngIf="cause.isDisabled==0" class="btn btn-danger btn-sm" (click)="disableCause(cause.cause_id)">Disable</button>
+                        <button *ngIf="cause.isDisabled==1" class="btn btn-primary btn-sm" (click)="enableCause(cause.cause_id)">Enable</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div>
+    <button (click)="logOut()" class="btn btn-danger m-2 float-right">Logout</button>
+</div>
+
+<!-- Add Cause Modal -->
+<div class="modal fade" id="addCauseModal" tabindex="-1" role="dialog" aria-labelledby="addCauseModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCauseModalLabel">Add Cause</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="causeName">Cause Name</label>
+                        <input type="text" class="form-control" id="causeName" [(ngModel)]="newCauseName"
+                            name="newCauseName" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="addCause()">Add Cause</button>
+            </div>
+        </div>
+    </div>
+</div>
